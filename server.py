@@ -14,6 +14,7 @@ robots.txt 없음 / 공공누리 저작권 정책 확인됨 (KOGL 1유형: 출�
 import base64
 import httpx
 from mcp.server.fastmcp import FastMCP
+from mcp.server.transport_security import TransportSecuritySettings
 
 BASE_URL = "https://pap.go.kr/api/fdadPlanRslt"
 DOWNLOAD_URL = "https://pap.go.kr/api/files/download"
@@ -21,7 +22,23 @@ DOWNLOAD_URL = "https://pap.go.kr/api/files/download"
 # base64 인코딩 시 원본보다 커지므로, 너무 큰 파일은 컨텍스트를 과도하게 잡아먹지 않도록 제한
 MAX_DOWNLOAD_BYTES = 8 * 1024 * 1024  # 8MB
 
-mcp = FastMCP("공공감사포털-자체감사결과조회", stateless_http=True)
+# ── DNS Rebinding 방지 설정 ──────────────────────────────────
+# 기본값은 localhost만 허용하므로, 실제 배포 도메인을 반드시 추가해야 함.
+# Render 등 배포 후 실제 도메인으로 바꿔주세요.
+security_settings = TransportSecuritySettings(
+    enable_dns_rebinding_protection=True,
+    allowed_hosts=[
+        "localhost",
+        "127.0.0.1",
+        "pap-audit-mcp-server.onrender.com",
+    ],
+    allowed_origins=[
+        "https://claude.ai",
+        "https://*.claude.ai",
+    ],
+)
+
+mcp = FastMCP("공공감사포털-자체감사결과조회", stateless_http=True, transport_security=security_settings)
 
 # 서버에 과도한 부담을 주지 않기 위한 안전장치
 DEFAULT_TIMEOUT = 15.0
