@@ -43,7 +43,7 @@ mcp = FastMCP("공공감사포털-자체감사결과조회", stateless_http=True
 # 서버에 과도한 부담을 주지 않기 위한 안전장치
 DEFAULT_TIMEOUT = 15.0
 REQUEST_HEADERS = {
-    "User-Agent": "MCP-AuditReportClient/1.0 (개인/기관 업무용 조회 목적)"
+    "User-Agent": "MCP-AuditReportClient/1.0 (audit report lookup tool)"
 }
 
 
