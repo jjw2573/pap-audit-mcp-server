@@ -181,6 +181,9 @@ def _format_results(data: dict) -> str:
                 f"/ 관련기관: {sub.get('instNm', '-')} "
                 f"/ 처분: {sub.get('dsprqKindList', '-')}"
             )
+            file_uuid = sub.get("rlsDocAtchFileUuid")
+            if file_uuid:
+                lines.append(f"        └ 첨부파일ID: {file_uuid}")
         lines.append("")
 
     return "\n".join(lines)
